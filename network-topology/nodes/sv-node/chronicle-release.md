@@ -12,7 +12,7 @@ To summarize the Chronicle release, the following points should be outlined:
 
 * **Restoration of Bitcoin's Original Protocol**: The Chronicle release aims to restore the original Bitcoin protocol by re-installing specific opcodes and removing listed restrictions, while also balancing stability for businesses that depend on the current state.
 * **Transaction Digest Algorithms**: The BSV Blockchain will now support the Original Transaction Digest Algorithm (OTDA), in addition to the current BIP143 digest algorithm, ensuring compatibility and flexibility for developers and users. This restores the original Bitcoin transaction digest algorithm, enabling developers to have greater flexibility in utilizing Bitcoin Script. Usage of the OTDA will require setting the new CHRONICLE \[`0x20`] sighash flag.
-* **Selective Malleability Restrictions:** The Chronicle Release removes restrictions that were put in place to prevent transaction malleability. To address concerns about the reintroduction of sources of transaction malleability, the application of malleability restrictions will depend on the usage of the new CHRONICLE \[`0x20`] sighash flag. Transactions signed with CHRONICLE enabled will allow relaxed rules, removing strict enforcement of malleability-related constraints. This flexibility is agnostic to the number of signatures in a transaction. The restrictions relevant to the CHRONICLE flag are:
+* **Selective Malleability Restrictions:** The Chronicle Release removes restrictions that were put in place to prevent transaction malleability. To address concerns about the reintroduction of sources of transaction malleability, the application of malleability restrictions will depend on the usage of existing Transaction Version field. Transactions signed with any version value greater than `0x00000001` will be evaluated without any malleability-related restrictions. Transactions signed with a value of `0x00000001` will adhere to the pre-Chronicle malleability-related restrictions. The restrictions relevant to this behavior:
   * Minimal Encoding Requirement
   * Low S Requirement for Signatures
   * NULLFAIL and NULLDUMMY check for `OP_CHECKSIG` and `OP_CHECKMULTISIG`
@@ -21,13 +21,19 @@ To summarize the Chronicle release, the following points should be outlined:
   * Data Only in Unlocking Script Requirement
 * **Business Impact and Flexibility:** In line with the BSV Blockchain's commitment to stability, existing users and applications using the BIP143 digest (without CHRONICLE) will remain unaffected by the Chronicle update. For developers aiming to leverage the original protocol's behavior, the Chronicle release offers the option to utilize the Original Transaction Digest Algorithm (OTDA) and the flexibility to determine malleability-related restrictions for transactions.
 
-## 1. Transaction Digest Algorithms and Selective Malleability Restrictions
+## 1. Transaction Digest Algorithms
 
 As mentioned above, in the Chronicle release, malleability-related rules are being adjusted dependent on how transactions are signed.
 
-These changes depend on the usage of the new `CHRONICLE` \[`0x20`] Sighash bit. By default, users who do nothing will retain the current behavior (with `CHRONICLE` disabled). The OTDA will reintroduce relaxed rules where needed. It is also important to mention that it doesn't matter if the transaction configuration involves multiple signatures within a script or across multiple inputs. This approach enables optional adoption of relaxed malleability constraints. The table below describes all possible scenarios and their expected results:
+These changes depend on the usage of the new `CHRONICLE` \[`0x20`] Sighash bit. By default, users who do nothing will retain the current behavior (with `CHRONICLE` disabled). The OTDA will reintroduce relaxed rules where needed. It is also important to mention that it doesn't matter if the transaction configuration involves multiple signatures within a script or across multiple inputs. The table below describes all possible scenarios of the usage of the `CHRONICLE` flag and their expected results:
 
 <table><thead><tr><th width="199">Input/Transaction Config</th><th>CHRONICLE</th><th>TDA</th><th>Malleability Rules Enforcement</th></tr></thead><tbody><tr><td>Single input, single signature</td><td>0</td><td>BIP143</td><td>Strict</td></tr><tr><td>Single input, single signature</td><td>1</td><td>OTDA</td><td>Relaxed</td></tr><tr><td>Multiple signatures across one or more inputs.</td><td>All 0</td><td>BIP143</td><td>Strict</td></tr><tr><td>Multiple signatures across one or more inputs.</td><td>All 1</td><td>OTDA</td><td>Relaxed</td></tr><tr><td>Multiple signatures across one or more inputs.</td><td>Mixed</td><td>Mixed</td><td>Strict</td></tr></tbody></table>
+
+## 2. Selected Malleability Restrictions
+
+The first 4 bytes of a Bitcoin transaction contains the Transaction Version. This version field, when processed by `OP_VER` in the script engine, is processed as a Script Number. To allow for stability for ongoing businesses, transactions containing a version number of `0x00000001` will be unchanged by the Chronicle Release. To remove all of the malleability related restrictions outlined below, transactions containing a version number higher than `0x00000001` will have these restrictions removed.
+
+Below are all of these restrictions that are being removed in Chronicle:
 
 ### Minimal Encoding Requirement Removal
 
@@ -123,7 +129,7 @@ It should be noted that the unlocking script is evaluated, the resulting main st
 
 There are specific use cases for "showing your work" like this in the unlocking script. Typically it is not necessary to include intermediate values, and simply passing the result of any calculation as push data would be sufficient.
 
-## 2. Opcodes 
+## 3. Opcodes 
 
 The opcodes listed below will be re-instated.  
 
@@ -255,6 +261,28 @@ Divides the number on the top of the stack by 2.
 ```
 Inputs: The number to be divided by 2 → tos
 Output: tos = Input number / 2 
+```
+
+### OP\_LSHIFTNUM
+
+Opcode number 179, `0xb3`. Previously `OP_NOP4`. Restores the original behavior of the `OP_LSHIFT` opcode.
+
+Performs a numerical shift to the left `b` bits.
+
+```
+Inputs: a, b
+Output: Shift "a" left "b" bits, preserving sign
+```
+
+### OP\_RSHIFTNUM
+
+Opcode number 180, `0xb4`. Previously `OP_NOP5`. Restores the original behavior of the `OP_RSHIFT` opcode.
+
+Performs a numerical shift to the right `b` bits.
+
+```
+Inputs: a, b
+Output: Shift "a" right "b" bits, preserving sign
 ```
 
 The rest of the Opcodes remain intact; their description can be found in the [corresponding document](https://docs.bsvblockchain.org/protocol/transaction-lifecycle/opcodes-used-in-script).
