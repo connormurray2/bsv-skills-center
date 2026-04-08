@@ -172,7 +172,7 @@ The opcodes listed below will be re-instated.
 
 Opcode number 98, hex `0x62`
 
-`OP_VER` pushes the executing transaction's version onto the stack. The transaction version is the first four bytes of the transaction containing the executing script. The value is treated as a script number.
+`OP_VER` pushes the executing transaction's version onto the stack. The transaction version is the first four bytes of the transaction containing the executing script. 
 
 ```
 Inputs: none
