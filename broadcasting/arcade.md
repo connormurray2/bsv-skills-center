@@ -12,6 +12,10 @@ Arcade is the successor to [ARC and mAPI](legacy-arc-mapi.md). Its HTTP API keep
 
 {% embed url="https://github.com/bsv-blockchain/arcade" %}
 
+{% hint style="success" %}
+**Two ways to use it.** Point your application at one of the [public endpoints](#public-endpoints) below and start broadcasting immediately, or [run your own instance](run-your-own-arcade.md) for private callbacks, your own limits, and no third-party dependency. The API is identical either way. New here? Start with the [Quickstart](quickstart.md).
+{% endhint %}
+
 ## Public endpoints
 
 The following instances are open to anyone, on mainnet, with no API key.
@@ -26,7 +30,7 @@ The following instances are open to anyone, on mainnet, with no API key.
 Each instance publishes its own fee and size limits at `GET /policy`. They differ by operator, so read the policy from the instance you intend to use rather than assuming one value across the network. Every instance also serves interactive API documentation at its root URL and a liveness report at `/health` that lists the Teranode endpoints it is connected to.
 
 {% hint style="info" %}
-The public endpoints are shared infrastructure, suitable for development and for production applications with ordinary volume. If you need guaranteed throughput, an SLA, or private callback handling, run your own instance (see [Self-hosting](#self-hosting)) or arrange a commercial agreement with an operator.
+The public endpoints are shared infrastructure, suitable for development and for production applications with ordinary volume. If you need guaranteed throughput, private callback handling, or simply no dependency on someone else's service, [run your own instance](run-your-own-arcade.md). It takes about ten minutes.
 {% endhint %}
 
 ## Quick start
@@ -256,63 +260,4 @@ It submits EF when every input has its `source_transaction`, falls back to raw h
 
 ## Self-hosting
 
-Running your own Arcade gives you private callback handling, your own rate limits, and no dependence on a third party for broadcast. The standalone profile needs only Go, about a gigabyte of disk, and network access to Teranode peers.
-
-```bash
-git clone https://github.com/bsv-blockchain/arcade.git
-cd arcade
-go build -o arcade ./cmd/arcade
-```
-
-Minimal `config.yaml` for mainnet:
-
-```yaml
-mode: all
-log_level: info
-network: mainnet
-storage_path: ~/.arcade
-
-api:
-  host: 127.0.0.1
-  port: 8080
-
-health:
-  port: 8081
-
-kafka:
-  backend: memory
-  consumer_group: arcade
-
-store:
-  backend: pebble
-  pebble:
-    path: ~/.arcade/pebble
-
-p2p:
-  datahub_discovery: true
-
-chaintracks_server:
-  enabled: true
-
-# Required for status progression beyond RECEIVED.
-callback_url: "https://arcade.example.com/api/v1/merkle-service/callback"
-callback_token: "<output of: openssl rand -hex 32>"
-
-merkle_service:
-  url: "https://merkle-service-us-1.bsvb.tech"
-```
-
-```bash
-./arcade --config config.yaml
-curl http://localhost:8080/health
-```
-
-Points to know before going to production:
-
-- **Merkle Service is what advances status.** Arcade delegates proof construction to a separate Merkle Service, which calls back into your instance at `callback_url`. Without it every transaction stays at `RECEIVED` forever. The BSV Association hosts public Merkle Service instances for mainnet (`https://merkle-service-us-1.bsvb.tech`), testnet (`https://merkle-service-testnet-us-1.bsvb.tech`), and teratestnet (`https://merkle-service-ttn-us-1.bsvb.tech`). Your `callback_url` must be reachable from the Merkle Service, not just from your own machine.
-- **Peers are discovered automatically.** With `datahub_discovery: true` Arcade finds Teranode endpoints over libp2p using built-in bootstrap peers for mainnet, testnet, and teratestnet. Regtest needs `bootstrap_peers` set by hand.
-- **Bind the API privately or add auth.** The API has no authentication by default. Keep `api.host` on a private interface or put it behind an authenticating proxy if the host is internet-facing.
-- **Scale by splitting services.** `mode: all` runs the API server, propagation, webhook delivery, SSE, and chain tracking in one process. Production deployments use external Kafka and Aerospike and run the services separately; start from `config.example.yaml` in the repository.
-- **Every setting can be an environment variable** prefixed `ARCADE_`, for example `ARCADE_NETWORK=testnet`.
-
-The repository's [getting started guide](https://github.com/bsv-blockchain/arcade/blob/main/docs/getting-started.md) covers per-network configuration and the alternative storage backends in more detail.
+Anyone can run Arcade. A single binary with an embedded store is a complete instance, and the BSV Association hosts the Merkle Service that drives status tracking for any instance on mainnet, testnet, or teratestnet. See [Run Your Own Arcade](run-your-own-arcade.md) for a ten-minute walkthrough covering source and container installs, configuration for each network, enabling status tracking, and production deployment.

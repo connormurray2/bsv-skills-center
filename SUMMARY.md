@@ -118,7 +118,9 @@
 ## Broadcasting
 
 * [Overview](broadcasting/README.md)
+* [Quickstart](broadcasting/quickstart.md)
 * [Arcade](broadcasting/arcade.md)
+* [Run Your Own Arcade](broadcasting/run-your-own-arcade.md)
 * [Web Broadcasters](broadcasting/web-broadcasters.md)
 * [API Broadcasters](broadcasting/api-broadcasters.md)
 * [Node RPC](broadcasting/node-rpc.md)

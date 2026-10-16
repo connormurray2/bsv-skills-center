@@ -11,7 +11,9 @@ Broadcasting is the step that takes a fully signed transaction from your applica
 This section documents every supported way to broadcast on BSV, from the BSV Association's recommended service to a paste-and-send web form, and explains when to use each.
 
 {% hint style="success" %}
-**Recommended path:** [Arcade](arcade.md) is the BSV Association's supported transaction broadcaster. It accepts transactions over a simple HTTP API, delivers them directly to Teranode, tracks their status through to mining, and returns the merkle path you need for SPV. It replaces both mAPI and ARC. Public endpoints are hosted by the BSV Association and by GorillaPool, and you can also run your own.
+**Recommended path:** [Arcade](arcade.md) is the BSV Association's supported transaction broadcaster. It accepts transactions over a simple HTTP API, delivers them directly to Teranode, tracks their status through to mining, and returns the merkle path you need for SPV. It replaces both mAPI and ARC.
+
+Use it two ways: send to a **public endpoint** hosted by the BSV Association or GorillaPool, or **[run your own instance](run-your-own-arcade.md)** in about ten minutes. The [Quickstart](quickstart.md) walks through your first broadcast.
 {% endhint %}
 
 ## Before you broadcast
@@ -30,7 +32,8 @@ The SDKs produce EF automatically when every input has its source transaction at
 
 | Method | Interface | Input | Status tracking | Auth | Best for |
 | --- | --- | --- | --- | --- | --- |
-| [**Arcade**](arcade.md) | REST, SDK classes | Raw, EF | Full lifecycle, webhooks, SSE, merkle path on mining | None on public endpoints | Any application. The default choice. |
+| [**Arcade**](arcade.md), public endpoint | REST, SDK classes | Raw, EF | Full lifecycle, webhooks, SSE, merkle path on mining | None | Any application. The default choice. |
+| [**Arcade**](run-your-own-arcade.md), your own instance | REST, SDK classes | Raw, EF | As above, delivered privately | Whatever you configure | Production applications; anyone who wants no third-party dependency |
 | [**API broadcasters**](api-broadcasters.md) (WhatsOnChain, Bitails, BananaBlocks) | REST | Raw hex | Separate explorer lookups | Optional API key for higher limits | Prototypes, low volume, apps already using an explorer API |
 | [**Web broadcasters**](web-broadcasters.md) (WhatsOnChain, Bitails) | Browser form | Raw hex | Explorer page | None | One-off manual sends, debugging, support |
 | [**Node RPC**](node-rpc.md) (SV Node, Teranode) | JSON-RPC or HTTP | Raw, EF | Mempool and chain queries on the same node | Your own credentials, or none on the public endpoint | Operators running their own node; last-resort fallback |
@@ -38,11 +41,15 @@ The SDKs produce EF automatically when every input has its source transaction at
 
 ## Choosing a method
 
-- **You are building an application or wallet.** Use Arcade. Point your SDK at a public endpoint for development, and run your own instance or use a paid provider when you need an SLA.
+- **You are building an application or wallet.** Use Arcade. Point your SDK at a public endpoint for development, and [run your own instance](run-your-own-arcade.md) for production.
 - **You already depend on an explorer API** for UTXO lookups or history and send a handful of transactions. Their broadcast endpoints are fine, but watch the rate limits and plan to move to Arcade as volume grows.
 - **You need to push one transaction right now** and have the hex in a clipboard. Use a web broadcaster.
 - **You run your own SV Node or Teranode.** Broadcast through it. You get the same validation the miners apply, and you are not dependent on a third party.
 - **You have an ARC integration in production.** It still works. Arcade is API-compatible on the parts that matter, so migration is mostly a URL change. See the [legacy page](legacy-arc-mapi.md).
+
+## Running your own broadcaster
+
+Nothing on this page requires trusting a third party. Arcade is open source and runs as a single binary on ordinary hardware; the BSV Association hosts the supporting Merkle Service so that your instance receives status updates and merkle proofs without ingesting the chain itself. If you already operate an SV Node or Teranode, you can broadcast through it directly. See [Run Your Own Arcade](run-your-own-arcade.md) and [Node RPC](node-rpc.md).
 
 ## What "accepted" means
 
