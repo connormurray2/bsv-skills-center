@@ -119,8 +119,8 @@
 
 * [Overview](broadcasting/README.md)
 * [Quickstart](broadcasting/quickstart.md)
-* [BSV Broadcaster](broadcasting/arcade.md)
-* [Run Your Own BSV Broadcaster](broadcasting/run-your-own-arcade.md)
+* [BSV Broadcaster](broadcasting/bsv-broadcaster.md)
+* [Run Your Own BSV Broadcaster](broadcasting/run-your-own-bsv-broadcaster.md)
 * [Web Broadcasters](broadcasting/web-broadcasters.md)
 * [API Broadcasters](broadcasting/api-broadcasters.md)
 * [Node RPC](broadcasting/node-rpc.md)

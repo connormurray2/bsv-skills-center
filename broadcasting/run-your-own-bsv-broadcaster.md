@@ -144,7 +144,7 @@ With the Merkle Service configured, the status should reach `SEEN_ON_NETWORK` wi
 
 ## Point your application at it
 
-Every example on the [BSV Broadcaster page](arcade.md#using-bsv-broadcaster-from-the-sdks) and the [Quickstart](quickstart.md) works unchanged against your own instance; replace the public URL with `http://localhost:8080` or wherever you expose it.
+Every example on the [BSV Broadcaster page](bsv-broadcaster.md#using-bsv-broadcaster-from-the-sdks) and the [Quickstart](quickstart.md) works unchanged against your own instance; replace the public URL with `http://localhost:8080` or wherever you expose it.
 
 ## Going to production
 

@@ -6,7 +6,7 @@ description: >-
 
 # Quickstart
 
-This page gets one transaction onto the BSV blockchain and shows you how to watch it get mined. It uses a public [BSV Broadcaster](arcade.md) endpoint, so there is nothing to install or sign up for. Where it says `<hex>`, substitute your own signed transaction.
+This page gets one transaction onto the BSV blockchain and shows you how to watch it get mined. It uses a public [BSV Broadcaster](bsv-broadcaster.md) endpoint, so there is nothing to install or sign up for. Where it says `<hex>`, substitute your own signed transaction.
 
 ## 1. Get a signed transaction
 
@@ -20,7 +20,7 @@ The transaction must spend outputs that exist and are unspent, and must pay at l
 
 ## 2. Pick an endpoint and read its policy
 
-Choose the public instance nearest to you. This page uses the BSV Association's US endpoint throughout; the full list is on the [BSV Broadcaster page](arcade.md#public-endpoints).
+Choose the public instance nearest to you. This page uses the BSV Association's US endpoint throughout; the full list is on the [BSV Broadcaster page](bsv-broadcaster.md#public-endpoints).
 
 ```bash
 export BROADCASTER=https://arcade-us-1.bsvblockchain.tech
@@ -171,6 +171,6 @@ print(broadcaster.check_transaction_status(result.txid))
 
 ## Where to go next
 
-- **Get notified instead of polling.** Submit with `X-CallbackUrl` and BSV Broadcaster will POST each status change to your server. See [Webhooks](arcade.md#webhooks).
-- **Run your own BSV Broadcaster.** The public endpoints are shared. For private callbacks, your own policy, and no third-party dependency, [run an instance](run-your-own-arcade.md); it takes about ten minutes.
+- **Get notified instead of polling.** Submit with `X-CallbackUrl` and BSV Broadcaster will POST each status change to your server. See [Webhooks](bsv-broadcaster.md#webhooks).
+- **Run your own BSV Broadcaster.** The public endpoints are shared. For private callbacks, your own policy, and no third-party dependency, [run an instance](run-your-own-bsv-broadcaster.md); it takes about ten minutes.
 - **Use a different route.** Every other way to broadcast, and when each one makes sense, is on the [overview](README.md).

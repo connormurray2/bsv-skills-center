@@ -17,7 +17,7 @@ BSV Broadcaster was previously called Arcade. The repository, public hostnames, 
 {% embed url="https://github.com/bsv-blockchain/arcade" %}
 
 {% hint style="success" %}
-**Two ways to use it.** Point your application at one of the [public endpoints](#public-endpoints) below and start broadcasting immediately, or [run your own instance](run-your-own-arcade.md) for private callbacks, your own limits, and no third-party dependency. The API is identical either way. New here? Start with the [Quickstart](quickstart.md).
+**Two ways to use it.** Point your application at one of the [public endpoints](#public-endpoints) below and start broadcasting immediately, or [run your own instance](run-your-own-bsv-broadcaster.md) for private callbacks, your own limits, and no third-party dependency. The API is identical either way. New here? Start with the [Quickstart](quickstart.md).
 {% endhint %}
 
 ## Public endpoints
@@ -34,7 +34,7 @@ The following instances are open to anyone, on mainnet, with no API key.
 Each instance publishes its own fee and size limits at `GET /policy`. They differ by operator, so read the policy from the instance you intend to use rather than assuming one value across the network. Every instance also serves interactive API documentation at its root URL and a liveness report at `/health` that lists the Teranode endpoints it is connected to.
 
 {% hint style="info" %}
-The public endpoints are shared infrastructure, suitable for development and for production applications with ordinary volume. If you need guaranteed throughput, private callback handling, or simply no dependency on someone else's service, [run your own instance](run-your-own-arcade.md). It takes about ten minutes.
+The public endpoints are shared infrastructure, suitable for development and for production applications with ordinary volume. If you need guaranteed throughput, private callback handling, or simply no dependency on someone else's service, [run your own instance](run-your-own-bsv-broadcaster.md). It takes about ten minutes.
 {% endhint %}
 
 ## Quick start
@@ -264,4 +264,4 @@ It submits EF when every input has its `source_transaction`, falls back to raw h
 
 ## Self-hosting
 
-Anyone can run BSV Broadcaster. A single binary with an embedded store is a complete instance, and the BSV Association hosts the Merkle Service that drives status tracking for any instance on mainnet, testnet, or teratestnet. See [Run Your Own BSV Broadcaster](run-your-own-arcade.md) for a ten-minute walkthrough covering source and container installs, configuration for each network, enabling status tracking, and production deployment.
+Anyone can run BSV Broadcaster. A single binary with an embedded store is a complete instance, and the BSV Association hosts the Merkle Service that drives status tracking for any instance on mainnet, testnet, or teratestnet. See [Run Your Own BSV Broadcaster](run-your-own-bsv-broadcaster.md) for a ten-minute walkthrough covering source and container installs, configuration for each network, enabling status tracking, and production deployment.

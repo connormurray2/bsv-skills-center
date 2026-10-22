@@ -8,7 +8,7 @@ description: >-
 
 Several BSV block explorers expose an HTTP endpoint that accepts a raw transaction and relays it to the network. They are simple to call, need no account to get started, and are often already part of an application's stack for UTXO and history lookups.
 
-They are not transaction processors. None of them track a transaction's lifecycle for you, deliver merkle paths, or notify you when it is mined; you poll their transaction endpoints for that. Their free tiers are rate-limited at levels suited to prototypes and low-volume applications. For anything beyond that, use [BSV Broadcaster](arcade.md).
+They are not transaction processors. None of them track a transaction's lifecycle for you, deliver merkle paths, or notify you when it is mined; you poll their transaction endpoints for that. Their free tiers are rate-limited at levels suited to prototypes and low-volume applications. For anything beyond that, use [BSV Broadcaster](bsv-broadcaster.md).
 
 | Service | Mainnet base URL | Testnet base URL | Free limit | API key |
 | --- | --- | --- | --- | --- |

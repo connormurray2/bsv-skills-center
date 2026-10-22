@@ -30,7 +30,7 @@ The pages accept only the plain raw format. If you have an Extended Format or BE
 
 ## When they are not
 
-- Anything automated. Use [BSV Broadcaster](arcade.md) or an [API broadcaster](api-broadcasters.md).
+- Anything automated. Use [BSV Broadcaster](bsv-broadcaster.md) or an [API broadcaster](api-broadcasters.md).
 - Transactions that spend unconfirmed outputs of transactions you have not broadcast yet. Send the parents first, in order.
 - Very large transactions. Browser forms have practical limits well below what the network accepts. Use Bitails's multipart API or BSV Broadcaster's binary endpoint instead.
 

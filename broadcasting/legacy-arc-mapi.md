@@ -73,4 +73,4 @@ Steps:
 4. **Treat `DOUBLE_SPEND_ATTEMPTED` and HTTP 400 as final** in your retry logic.
 5. **Re-read policy.** Fee floors and size caps differ between operators. Query `GET /policy` on the instance you move to.
 
-See the [BSV Broadcaster page](arcade.md) for the full API and public endpoints.
+See the [BSV Broadcaster page](bsv-broadcaster.md) for the full API and public endpoints.
