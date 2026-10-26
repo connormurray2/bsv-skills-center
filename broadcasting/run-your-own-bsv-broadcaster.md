@@ -8,7 +8,7 @@ description: >-
 
 BSV Broadcaster is open source under the Open BSV licence and is designed to be run by anyone. A single binary with an embedded key-value store is enough for a working instance; no PostgreSQL, Kafka, or other services are required. Running your own gives you a broadcaster that is entirely under your control, which is the right choice for any production application and a sensible one for serious development.
 
-{% embed url="https://github.com/bsv-blockchain/broadcaster" %}
+{% embed url="https://github.com/bsv-blockchain/arcade" %}
 
 ## Why run your own
 
@@ -30,21 +30,21 @@ BSV Broadcaster is open source under the Open BSV licence and is designed to be 
 {% tabs %}
 {% tab title="From source" %}
 ```bash
-git clone https://github.com/bsv-blockchain/broadcaster.git
-cd broadcaster
-go build -o broadcaster ./cmd/broadcaster
+git clone https://github.com/bsv-blockchain/arcade.git
+cd arcade
+go build -o arcade ./cmd/arcade
 ```
 {% endtab %}
 
 {% tab title="Container image" %}
-The published image is `ghcr.io/bsv-blockchain/broadcaster:latest`. It is distroless, so it contains only the binary; mount your configuration and expose the API and health ports.
+The published image is `ghcr.io/bsv-blockchain/arcade:latest`. It is distroless, so it contains only the binary; mount your configuration and expose the API and health ports.
 
 ```bash
-docker run -d --name broadcaster \
-  -v "$(pwd)/config.yaml:/etc/broadcaster/config.yaml:ro" \
-  -v broadcaster-data:/data \
+docker run -d --name arcade \
+  -v "$(pwd)/config.yaml:/etc/arcade/config.yaml:ro" \
+  -v arcade-data:/data \
   -p 8080:8080 -p 8081:8081 \
-  ghcr.io/bsv-blockchain/broadcaster:latest --config /etc/broadcaster/config.yaml
+  ghcr.io/bsv-blockchain/arcade:latest --config /etc/arcade/config.yaml
 ```
 
 Set `storage_path` and the Pebble `path` in your configuration to somewhere under `/data` so state survives container restarts.
@@ -59,7 +59,7 @@ Save this as `config.yaml`. It runs every BSV Broadcaster service in one process
 mode: all                      # run every service in one process
 log_level: info
 network: mainnet               # mainnet | testnet | teratestnet | regtest
-storage_path: ~/.broadcaster
+storage_path: ~/.arcade
 
 api:
   host: 127.0.0.1              # bind privately; see Security below
@@ -74,7 +74,7 @@ kafka:
 store:
   backend: pebble              # embedded key-value store
   pebble:
-    path: ~/.broadcaster/pebble
+    path: ~/.arcade/pebble
     memtable_size_mb: 64
     l0_compaction_threshold: 4
     sync_writes: false
@@ -86,14 +86,14 @@ chaintracks_server:
   enabled: true                # serve block headers at /chaintracks
 
 # Status tracking (see "Enable status tracking" below)
-callback_url: "https://broadcaster.example.com/api/v1/merkle-service/callback"
+callback_url: "https://arcade.example.com/api/v1/merkle-service/callback"
 callback_token: "<output of: openssl rand -hex 32>"
 
 merkle_service:
   url: "https://merkle-service-us-1.bsvb.tech"
 ```
 
-Any value can be overridden by an environment variable prefixed `BSV_BROADCASTER_`, for example `BSV_BROADCASTER_NETWORK=testnet` or `BSV_BROADCASTER_LOG_LEVEL=debug`.
+Any value can be overridden by an environment variable prefixed `ARCADE_`, for example `ARCADE_NETWORK=testnet` or `ARCADE_LOG_LEVEL=debug`.
 
 ### Choosing a network
 
@@ -121,7 +121,7 @@ Without a Merkle Service, BSV Broadcaster still validates and broadcasts, but ev
 ## Run and verify
 
 ```bash
-./broadcaster --config config.yaml
+./arcade --config config.yaml
 ```
 
 ```bash
@@ -160,4 +160,4 @@ Every example on the [BSV Broadcaster page](bsv-broadcaster.md#using-bsv-broadca
 - **The Merkle Service callback endpoint is bearer-authenticated** by `callback_token`. It is the only inbound route your instance needs from the outside.
 - **Callback URLs you accept from clients are checked** against private and loopback address ranges, so a client cannot use your instance to probe your internal network.
 
-The repository's [getting started guide](https://github.com/bsv-blockchain/broadcaster/blob/main/docs/getting-started.md) and [`config.example.yaml`](https://github.com/bsv-blockchain/broadcaster/blob/main/config.example.yaml) document every option.
+The repository's [getting started guide](https://github.com/bsv-blockchain/arcade/blob/main/docs/getting-started.md) and [`config.example.yaml`](https://github.com/bsv-blockchain/arcade/blob/main/config.example.yaml) document every option.

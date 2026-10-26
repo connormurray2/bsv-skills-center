@@ -6,15 +6,15 @@ description: >-
 
 # BSV Broadcaster
 
-[BSV Broadcaster](https://github.com/bsv-blockchain/broadcaster) is the BSV Association's transaction broadcast service. It accepts a signed transaction over HTTP, validates it against network policy, delivers it to Teranode, and then follows it through the network until it is mined, reporting each status change by webhook or server-sent events and handing back the merkle path once the transaction is in a block.
+[BSV Broadcaster](https://github.com/bsv-blockchain/arcade) is the BSV Association's transaction broadcast service. It accepts a signed transaction over HTTP, validates it against network policy, delivers it to Teranode, and then follows it through the network until it is mined, reporting each status change by webhook or server-sent events and handing back the merkle path once the transaction is in a block.
 
 BSV Broadcaster is the successor to [ARC and mAPI](legacy-arc-mapi.md). Its HTTP API keeps ARC's request and response shapes wherever practical, so most ARC clients can be repointed with a URL change. Unlike ARC, it is built for Teranode only and runs as a single binary with no external database.
 
 {% hint style="info" %}
-BSV Broadcaster was previously called Arcade. If you are migrating, the repository, hostname, container image, and environment variable prefix have all changed; the Python SDK class is still named `Arcade`.
+BSV Broadcaster was previously called Arcade. The repository, public hostnames, binary, container image, configuration keys, and the Python SDK class still use the name `arcade`, so you will see it in URLs and code throughout these pages.
 {% endhint %}
 
-{% embed url="https://github.com/bsv-blockchain/broadcaster" %}
+{% embed url="https://github.com/bsv-blockchain/arcade" %}
 
 {% hint style="success" %}
 **Two ways to use it.** Point your application at one of the [public endpoints](#public-endpoints) below and start broadcasting immediately, or [run your own instance](run-your-own-bsv-broadcaster.md) for private callbacks, your own limits, and no third-party dependency. The API is identical either way. New here? Start with the [Quickstart](quickstart.md).
@@ -24,10 +24,12 @@ BSV Broadcaster was previously called Arcade. If you are migrating, the reposito
 
 The following instances are open to anyone, on mainnet, with no API key.
 
-| Operator | URL |
-| --- | --- |
-| BSV Association | `https://broadcast.bsvblockchain.tech` |
-| GorillaPool | `https://arcade.gorillapool.io` |
+| Operator | Region | URL |
+| --- | --- | --- |
+| BSV Association | United States | `https://arcade-us-1.bsvblockchain.tech` |
+| BSV Association | Europe | `https://arcade-eu-1.bsvblockchain.tech` |
+| BSV Association | Asia-Pacific | `https://arcade-ap-1.bsvblockchain.tech` |
+| GorillaPool | — | `https://arcade.gorillapool.io` |
 
 Each instance publishes its own fee and size limits at `GET /policy`. They differ by operator, so read the policy from the instance you intend to use rather than assuming one value across the network. Every instance also serves interactive API documentation at its root URL and a liveness report at `/health` that lists the Teranode endpoints it is connected to.
 
@@ -40,7 +42,7 @@ The public endpoints are shared infrastructure, suitable for development and for
 Submit a transaction as hex:
 
 ```bash
-curl -X POST https://broadcast.bsvblockchain.tech/tx \
+curl -X POST https://arcade-us-1.bsvblockchain.tech/tx \
   -H "Content-Type: text/plain" \
   --data "<hex-encoded transaction>"
 ```
@@ -52,7 +54,7 @@ curl -X POST https://broadcast.bsvblockchain.tech/tx \
 Check its status:
 
 ```bash
-curl https://broadcast.bsvblockchain.tech/tx/<txid>
+curl https://arcade-us-1.bsvblockchain.tech/tx/<txid>
 ```
 
 ```json
@@ -68,7 +70,7 @@ curl https://broadcast.bsvblockchain.tech/tx/<txid>
 
 ## API reference
 
-Every path is relative to the instance URL. The full OpenAPI description lives in the repository at [`openapi/broadcaster.openapi.yaml`](https://github.com/bsv-blockchain/broadcaster/blob/main/openapi/broadcaster.openapi.yaml).
+Every path is relative to the instance URL. The full OpenAPI description lives in the repository at [`openapi/arcade.openapi.yaml`](https://github.com/bsv-blockchain/arcade/blob/main/openapi/arcade.openapi.yaml).
 
 ### `POST /tx` — submit one transaction
 
@@ -139,7 +141,7 @@ Unless the operator has pinned a value, `miningFee` tracks the lowest rate curre
 A long-lived stream of status updates for every transaction submitted with a given `X-CallbackToken`:
 
 ```bash
-curl -N "https://broadcast.bsvblockchain.tech/events?callbackToken=<token>"
+curl -N "https://arcade-us-1.bsvblockchain.tech/events?callbackToken=<token>"
 ```
 
 ```
@@ -169,7 +171,7 @@ When you submit with `X-CallbackUrl`, BSV Broadcaster POSTs a JSON body to that 
 }
 ```
 
-Requests carry a `User-Agent` beginning `bsv-broadcaster-webhook/` and, if you supplied one, your callback token. Failed deliveries are retried with linear backoff (1, 2, 3 minutes and so on) up to the operator's configured limit. Callback URLs must be publicly routable; private and loopback addresses are refused at submit time.
+Requests carry a `User-Agent` beginning `arcade-webhook/` and, if you supplied one, your callback token. Failed deliveries are retried with linear backoff (1, 2, 3 minutes and so on) up to the operator's configured limit. Callback URLs must be publicly routable; private and loopback addresses are refused at submit time.
 
 ### Transaction statuses
 
@@ -199,7 +201,7 @@ The `Teranode` broadcaster in `@bsv/sdk` posts a transaction as Extended Format 
 ```ts
 import { Transaction, Teranode } from '@bsv/sdk'
 
-const broadcaster = new Teranode('https://broadcast.bsvblockchain.tech/tx')
+const broadcaster = new Teranode('https://arcade-us-1.bsvblockchain.tech/tx')
 
 const tx = Transaction.fromHex(signedTxHex)
 const result = await tx.broadcast(broadcaster)
@@ -226,7 +228,7 @@ tx, _ := transaction.NewTransactionFromHex(signedTxHex)
 
 callbackURL := "https://your.app/broadcaster-webhook"
 success, failure := tx.Broadcast(&broadcaster.Arc{
-    ApiUrl:      "https://broadcast.bsvblockchain.tech",
+    ApiUrl:      "https://arcade-us-1.bsvblockchain.tech",
     CallbackUrl: &callbackURL,
 })
 if failure != nil {
@@ -245,7 +247,7 @@ The Python SDK ships a dedicated `Arcade` class.
 from bsv.broadcasters import Arcade, ArcadeConfig
 
 broadcaster = Arcade(
-    "https://broadcast.bsvblockchain.tech",
+    "https://arcade-us-1.bsvblockchain.tech",
     ArcadeConfig(
         callback_url="https://your.app/broadcaster-webhook",
         callback_token="a-token-you-choose",
