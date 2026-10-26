@@ -20,10 +20,10 @@ The transaction must spend outputs that exist and are unspent, and must pay at l
 
 ## 2. Pick an endpoint and read its policy
 
-Choose the public instance nearest to you. This page uses the BSV Association's US endpoint throughout; the full list is on the [BSV Broadcaster page](bsv-broadcaster.md#public-endpoints).
+This page uses the BSV Association's public endpoint throughout. Other public instances are listed on the [BSV Broadcaster page](bsv-broadcaster.md#public-endpoints).
 
 ```bash
-export BROADCASTER=https://arcade-us-1.bsvblockchain.tech
+export BROADCASTER=https://broadcast.bsvblockchain.tech
 curl -s $BROADCASTER/policy
 ```
 
@@ -117,7 +117,7 @@ class BsvBroadcaster implements Broadcaster {
 }
 
 const tx = Transaction.fromHex('<hex>')
-console.log(await tx.broadcast(new BsvBroadcaster('https://arcade-us-1.bsvblockchain.tech')))
+console.log(await tx.broadcast(new BsvBroadcaster('https://broadcast.bsvblockchain.tech')))
 ```
 {% endtab %}
 
@@ -141,7 +141,7 @@ func main() {
     }
 
     success, failure := tx.Broadcast(&broadcaster.Arc{
-        ApiUrl: "https://arcade-us-1.bsvblockchain.tech",
+        ApiUrl: "https://broadcast.bsvblockchain.tech",
     })
     if failure != nil {
         panic(failure)
@@ -159,7 +159,7 @@ from bsv.broadcasters import Arcade
 from bsv import Transaction
 
 tx = Transaction.from_hex("<hex>")
-broadcaster = Arcade("https://arcade-us-1.bsvblockchain.tech")
+broadcaster = Arcade("https://broadcast.bsvblockchain.tech")
 
 result = broadcaster.sync_broadcast(tx)
 print(result.txid, result.message)
