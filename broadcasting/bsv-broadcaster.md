@@ -11,7 +11,7 @@ description: >-
 BSV Broadcaster is the successor to [ARC and mAPI](legacy-arc-mapi.md). Its HTTP API keeps ARC's request and response shapes wherever practical, so most ARC clients can be repointed with a URL change. Unlike ARC, it is built for Teranode only and runs as a single binary with no external database.
 
 {% hint style="info" %}
-BSV Broadcaster was previously called Arcade; the rename shipped in v0.19.0. The public hostnames and the Python SDK class still use the name `arcade`, and some public endpoints still run pre-rename releases, so their webhooks carry the old `arcade-webhook/` User-Agent. If you run your own instance, the repository's [migration guide](https://github.com/bsv-blockchain/broadcaster/blob/main/docs/migration-arcade-to-bsv-broadcaster.md) lists every renamed setting, path, and image.
+BSV Broadcaster was previously called Arcade; the rename shipped in v0.19.0. The public hostnames still use the name `arcade`, and some public endpoints still run pre-rename releases, so their webhooks carry the old `arcade-webhook/` User-Agent. If you run your own instance, the repository's [migration guide](https://github.com/bsv-blockchain/broadcaster/blob/main/docs/migration-arcade-to-bsv-broadcaster.md) lists every renamed setting, path, and image.
 {% endhint %}
 
 {% embed url="https://github.com/bsv-blockchain/broadcaster" %}
@@ -241,14 +241,18 @@ For ARC itself the same struct expects the versioned base, for example `https://
 
 ### Python
 
-The Python SDK ships a dedicated `Arcade` class.
+The Python SDK ships a dedicated `BsvBroadcaster` class.
+
+{% hint style="info" %}
+`BsvBroadcaster` and `BsvBroadcasterConfig` arrive in the next py-sdk release, after `bsv-sdk` 2.4.0. On 2.4.0 and earlier, import `Arcade` and `ArcadeConfig` instead. They take the same arguments and behave the same, and they remain available as deprecated aliases after the rename.
+{% endhint %}
 
 ```python
-from bsv.broadcasters import Arcade, ArcadeConfig
+from bsv.broadcasters import BsvBroadcaster, BsvBroadcasterConfig
 
-broadcaster = Arcade(
+broadcaster = BsvBroadcaster(
     "https://arcade-us-1.bsvblockchain.tech",
-    ArcadeConfig(
+    BsvBroadcasterConfig(
         callback_url="https://your.app/broadcaster-webhook",
         callback_token="a-token-you-choose",
     ),
@@ -260,7 +264,7 @@ result = broadcaster.sync_broadcast(tx)         # sync
 status = broadcaster.check_transaction_status(txid)
 ```
 
-It submits EF when every input has its `source_transaction`, falls back to raw hex otherwise, treats a `400` as terminal, and reports `REJECTED` or `DOUBLE_SPEND_ATTEMPTED` on a 202 resubmit as a `BroadcastFailure`. The SDK's own [`Arcade` class guide](https://github.com/bsv-blockchain/py-sdk/blob/master/docs/arcade_broadcasting.md) lists the remaining differences from its `ARC` class.
+It submits EF when every input has its `source_transaction`, falls back to raw hex otherwise, treats a `400` as terminal, and reports `REJECTED` or `DOUBLE_SPEND_ATTEMPTED` on a 202 resubmit as a `BroadcastFailure`. The SDK's own [broadcaster guide](https://github.com/bsv-blockchain/py-sdk/blob/master/docs/arcade_broadcasting.md) lists the remaining differences from its `ARC` class.
 
 ## Self-hosting
 

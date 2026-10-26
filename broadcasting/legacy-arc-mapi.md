@@ -67,7 +67,7 @@ BSV Broadcaster keeps the parts of ARC's interface that clients depend on, so mo
 
 Steps:
 
-1. **Change the URL and drop the `/v1` prefix** on submit and status paths. In the Go SDK that means `ApiUrl` becomes the BSV Broadcaster root. In the Python SDK switch to the `Arcade` class. In the TypeScript SDK use the `Teranode` class or a custom `Broadcaster`; the `ARC` class hard-codes `/v1/tx`.
+1. **Change the URL and drop the `/v1` prefix** on submit and status paths. In the Go SDK that means `ApiUrl` becomes the BSV Broadcaster root. In the Python SDK switch to the `BsvBroadcaster` class (`Arcade` on `bsv-sdk` 2.4.0 and earlier). In the TypeScript SDK use the `Teranode` class or a custom `Broadcaster`; the `ARC` class hard-codes `/v1/tx`.
 2. **Stop sending BEEF.** If your wallet exchanges BEEF with peers, convert to Extended Format before broadcasting. The SDKs do this when every input has its source transaction attached.
 3. **Replace any `X-WaitFor` polling** with a webhook (`X-CallbackUrl`) or the SSE stream.
 4. **Treat `DOUBLE_SPEND_ATTEMPTED` and HTTP 400 as final** in your retry logic.

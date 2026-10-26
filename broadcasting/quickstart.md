@@ -152,14 +152,14 @@ func main() {
 {% endtab %}
 
 {% tab title="Python" %}
-The Python SDK has a native `Arcade` class.
+The Python SDK has a native `BsvBroadcaster` class. It arrives in the next py-sdk release; on `bsv-sdk` 2.4.0 and earlier, use `Arcade`, which takes the same arguments.
 
 ```python
-from bsv.broadcasters import Arcade
+from bsv.broadcasters import BsvBroadcaster
 from bsv import Transaction
 
 tx = Transaction.from_hex("<hex>")
-broadcaster = Arcade("https://arcade-us-1.bsvblockchain.tech")
+broadcaster = BsvBroadcaster("https://arcade-us-1.bsvblockchain.tech")
 
 result = broadcaster.sync_broadcast(tx)
 print(result.txid, result.message)
