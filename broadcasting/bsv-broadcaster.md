@@ -11,7 +11,7 @@ description: >-
 BSV Broadcaster is the successor to [ARC and mAPI](legacy-arc-mapi.md). Its HTTP API keeps ARC's request and response shapes wherever practical, so most ARC clients can be repointed with a URL change. Unlike ARC, it is built for Teranode only and runs as a single binary with no external database.
 
 {% hint style="info" %}
-BSV Broadcaster was previously called Arcade; the rename shipped in v0.19.0. The public hostnames and the Python SDK class still use the name `arcade`, and the public endpoints still run pre-rename releases, so their webhooks carry the old `arcade-webhook/` User-Agent. If you run your own instance, the repository's [migration guide](https://github.com/bsv-blockchain/broadcaster/blob/main/docs/migration-arcade-to-bsv-broadcaster.md) lists every renamed setting, path, and image.
+BSV Broadcaster was previously called Arcade; the rename shipped in v0.19.0. The public hostnames and the Python SDK class still use the name `arcade`, and some public endpoints still run pre-rename releases, so their webhooks carry the old `arcade-webhook/` User-Agent. If you run your own instance, the repository's [migration guide](https://github.com/bsv-blockchain/broadcaster/blob/main/docs/migration-arcade-to-bsv-broadcaster.md) lists every renamed setting, path, and image.
 {% endhint %}
 
 {% embed url="https://github.com/bsv-blockchain/broadcaster" %}
