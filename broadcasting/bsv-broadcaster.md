@@ -11,7 +11,7 @@ description: >-
 BSV Broadcaster is the successor to [ARC and mAPI](legacy-arc-mapi.md). Its HTTP API keeps ARC's request and response shapes wherever practical, so most ARC clients can be repointed with a URL change. Unlike ARC, it is built for Teranode only and runs as a single binary with no external database.
 
 {% hint style="info" %}
-BSV Broadcaster was previously called Arcade. The public hostnames and the Python SDK class still use the name `arcade`. If you run your own instance, the repository's [migration guide](https://github.com/bsv-blockchain/broadcaster/blob/main/docs/migration-arcade-to-bsv-broadcaster.md) lists every renamed setting, path, and image.
+BSV Broadcaster was previously called Arcade; the rename shipped in v0.19.0. The public hostnames and the Python SDK class still use the name `arcade`, and the public endpoints still run pre-rename releases, so their webhooks carry the old `arcade-webhook/` User-Agent. If you run your own instance, the repository's [migration guide](https://github.com/bsv-blockchain/broadcaster/blob/main/docs/migration-arcade-to-bsv-broadcaster.md) lists every renamed setting, path, and image.
 {% endhint %}
 
 {% embed url="https://github.com/bsv-blockchain/broadcaster" %}
@@ -171,7 +171,7 @@ When you submit with `X-CallbackUrl`, BSV Broadcaster POSTs a JSON body to that 
 }
 ```
 
-Requests carry a `User-Agent` beginning `bsv-broadcaster-webhook/` and, if you supplied one, your callback token. Failed deliveries are retried with linear backoff (1, 2, 3 minutes and so on) up to the operator's configured limit. Callback URLs must be publicly routable; private and loopback addresses are refused at submit time.
+Requests carry a `User-Agent` beginning `bsv-broadcaster-webhook/` and, if you supplied one, your callback token. Releases before v0.19.0 send `arcade-webhook/` instead, and the public endpoints above still do, so if you allowlist callbacks by User-Agent, allow both prefixes. Failed deliveries are retried with linear backoff (1, 2, 3 minutes and so on) up to the operator's configured limit. Callback URLs must be publicly routable; private and loopback addresses are refused at submit time.
 
 ### Transaction statuses
 
@@ -260,7 +260,7 @@ result = broadcaster.sync_broadcast(tx)         # sync
 status = broadcaster.check_transaction_status(txid)
 ```
 
-It submits EF when every input has its `source_transaction`, falls back to raw hex otherwise, treats a `400` as terminal, and reports `REJECTED` or `DOUBLE_SPEND_ATTEMPTED` on a 202 resubmit as a `BroadcastFailure`. The SDK's own [BSV Broadcaster guide](https://github.com/bsv-blockchain/py-sdk/blob/master/docs/arcade_broadcasting.md) lists the remaining differences from its `ARC` class.
+It submits EF when every input has its `source_transaction`, falls back to raw hex otherwise, treats a `400` as terminal, and reports `REJECTED` or `DOUBLE_SPEND_ATTEMPTED` on a 202 resubmit as a `BroadcastFailure`. The SDK's own [`Arcade` class guide](https://github.com/bsv-blockchain/py-sdk/blob/master/docs/arcade_broadcasting.md) lists the remaining differences from its `ARC` class.
 
 ## Self-hosting
 

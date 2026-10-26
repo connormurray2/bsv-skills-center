@@ -10,6 +10,10 @@ BSV Broadcaster is open source under the Open BSV licence and is designed to be 
 
 {% embed url="https://github.com/bsv-blockchain/broadcaster" %}
 
+{% hint style="warning" %}
+**Already running Arcade?** Version 0.19.0 renamed the default storage path (`~/.arcade` to `~/.bsv-broadcaster`), the config directory, the environment variable prefix, and the container image. The commands on this page use the new defaults, so running them against an existing deployment silently starts from empty storage, with no status records, block headers, or p2p identity. Before upgrading, keep your existing Docker volume (for example `arcade-data`), pin `storage_path` and `store.pebble.path` to your old locations, and follow the [migration guide](https://github.com/bsv-blockchain/broadcaster/blob/main/docs/migration-arcade-to-bsv-broadcaster.md). Legacy `ARCADE_*` variables and `/etc/arcade` are still read, with a deprecation warning.
+{% endhint %}
+
 ## Why run your own
 
 - **No third-party dependency.** The public endpoints are shared, best-effort infrastructure operated by others. Your instance is up when you say it is.
