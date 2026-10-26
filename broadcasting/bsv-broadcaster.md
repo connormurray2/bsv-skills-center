@@ -171,7 +171,7 @@ When you submit with `X-CallbackUrl`, BSV Broadcaster POSTs a JSON body to that 
 }
 ```
 
-Requests carry a `User-Agent` beginning `bsv-broadcaster-webhook/` and, if you supplied one, your callback token. Releases before v0.19.0 send `arcade-webhook/` instead, and the public endpoints above still do, so if you allowlist callbacks by User-Agent, allow both prefixes. Failed deliveries are retried with linear backoff (1, 2, 3 minutes and so on) up to the operator's configured limit. Callback URLs must be publicly routable; private and loopback addresses are refused at submit time.
+Requests carry a `User-Agent` beginning `bsv-broadcaster-webhook/` and, if you supplied one, your callback token. Releases before v0.19.0 send `arcade-webhook/` instead, and some public endpoints still run them, so if you allowlist callbacks by User-Agent, allow both prefixes. Failed deliveries are retried with linear backoff (1, 2, 3 minutes and so on) up to the operator's configured limit. Callback URLs must be publicly routable; private and loopback addresses are refused at submit time.
 
 ### Transaction statuses
 
