@@ -37,14 +37,14 @@ go build -o broadcaster ./cmd/broadcaster
 {% endtab %}
 
 {% tab title="Container image" %}
-The published image is `ghcr.io/bsvblockchain/broadcaster:latest`. It is distroless, so it contains only the binary; mount your configuration and expose the API and health ports.
+The published image is `ghcr.io/bsv-blockchain/broadcaster:latest`. It is distroless, so it contains only the binary; mount your configuration and expose the API and health ports.
 
 ```bash
 docker run -d --name broadcaster \
   -v "$(pwd)/config.yaml:/etc/broadcaster/config.yaml:ro" \
   -v broadcaster-data:/data \
   -p 8080:8080 -p 8081:8081 \
-  ghcr.io/bsvblockchain/broadcaster:latest --config /etc/broadcaster/config.yaml
+  ghcr.io/bsv-blockchain/broadcaster:latest --config /etc/broadcaster/config.yaml
 ```
 
 Set `storage_path` and the Pebble `path` in your configuration to somewhere under `/data` so state survives container restarts.
